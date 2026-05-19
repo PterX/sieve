@@ -575,11 +575,10 @@ mod tests {
                         special_use,
                     } => {
                         for action in &actions {
-                            if let Event::FileInto { folder, create, .. } = action {
-                                if *create && !mailboxes.contains(folder) {
+                            if let Event::FileInto { folder, create, .. } = action
+                                && *create && !mailboxes.contains(folder) {
                                     mailboxes.push(folder.to_string());
                                 }
-                            }
                         }
                         input = (special_use.is_empty()
                             && mailboxes_.iter().all(|n| {
@@ -645,11 +644,9 @@ mod tests {
                                                                 message_id: message_id_,
                                                                 message,
                                                             } = item
-                                                            {
-                                                                if message_id == message_id_ {
+                                                                && message_id == message_id_ {
                                                                     return Some(message);
                                                                 }
-                                                            }
                                                             None
                                                         })
                                                         .unwrap();
