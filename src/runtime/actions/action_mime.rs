@@ -54,6 +54,7 @@ impl Replace {
         part.offset_body = 0;
         let prev_headers = std::mem::take(&mut part.headers);
         let mut add_date = true;
+        let mut has_original_from = false;
 
         if ctx.part == 0 {
             for mut header in prev_headers {
@@ -71,6 +72,8 @@ impl Replace {
                             header.name = HeaderName::Other("Original-From".into());
                             header.offset_field = header.offset_start;
                             size += "Original-".len();
+                        } else {
+                            has_original_from = true;
                         }
                     }
 
@@ -98,7 +101,7 @@ impl Replace {
                     );
                     add_from = false;
                 }
-            if add_from {
+            if add_from && !has_original_from {
                 ctx.insert_header(
                     0,
                     HeaderName::Other("From".to_string().into()),
